@@ -9,6 +9,7 @@
 #diceControlsContainer,
 #gameOverModal,
 #highScoresModal,
+#gameOverMessage,
 button,
 .die {
     display: none !important;
