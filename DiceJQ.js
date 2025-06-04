@@ -3,6 +3,7 @@ $(document).ready(function() {
     let previouslySelectedOption = [];
     let fiveOfKindFlag = false;
     let completedCells = 0;
+    let hasUnsavedProgress = false;
 
     $("#rollBtn").addClass("rollsAvailable");
 
@@ -51,6 +52,7 @@ $(document).ready(function() {
     // On new game, reset all cells and dice and close modals
     function reset() {
         if (confirm("Are you sure you want to start a new game?")) {
+            hasUnsavedProgress = false; // Reset flag when starting new game
             rollsAvailable = 3;
             previouslySelectedOption = [];
             fiveOfKindFlag = false;
@@ -119,6 +121,7 @@ $(document).ready(function() {
             return;
         }
 
+        hasUnsavedProgress = true; // Set flag when dice are rolled
         $(".die:not(.hold)").addClass("rolling");
 
         // Clear the current selected cell
@@ -328,6 +331,7 @@ $(document).ready(function() {
             return;
         }
 
+        hasUnsavedProgress = true;
         const diceValues = getSortedDiceValues();
 
         //Tests for fiveOfKindBonus condition
@@ -540,4 +544,12 @@ $(document).ready(function() {
     }
 
     $(".toggleInstructionsBtn").on("click", handleInstructionsToggle);
+
+    window.addEventListener('beforeunload', function (e) {
+        if (hasUnsavedProgress) {
+            e.preventDefault();
+            e.returnValue = 'You have unsaved progress. Are you sure you want to leave?';
+            return e.returnValue;
+        }
+    });
 });
